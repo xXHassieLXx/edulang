@@ -1,0 +1,87 @@
+/* Paleta educativa: azules y verdes suaves */
+.gestion-cursos {
+	padding: 0 12px 24px;
+
+	.controls {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		margin: 12px 0;
+
+		ion-searchbar {
+			--background: #f4f8fb;
+			--border-radius: 8px;
+			--box-shadow: none;
+		}
+
+		.filters {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+
+			ion-select {
+				width: 50%;
+			}
+		}
+	}
+
+	.curso-avatar {
+		background: linear-gradient(135deg, rgba(79,173,255,0.12), rgba(79,255,173,0.08));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		ion-icon {
+			color: #2b7bb9;
+			font-size: 24px;
+		}
+	}
+
+	.curso-nombre {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		color: #163d57;
+
+		.tag {
+			margin-left: 8px;
+			padding: 2px 8px;
+			background: #e7f6ff;
+			color: #0b5a88;
+			font-size: 12px;
+			border-radius: 12px;
+		}
+	}
+
+	.meta {
+		font-size: 13px;
+		color: #4d6474;
+	}
+
+	.docente {
+		font-size: 13px;
+		color: #2b7bb9;
+		font-weight: 500;
+	}
+
+	ion-item {
+		--padding-start: 12px;
+		--inner-background: #ffffff;
+		border-radius: 10px;
+		margin-bottom: 8px;
+		box-shadow: 0 1px 6px rgba(21, 58, 79, 0.06);
+	}
+
+	.empty-card {
+		margin: 20px;
+		text-align: center;
+		color: #57788f;
+	}
+}
+
+@media (min-width: 768px) {
+	.gestion-cursos .filters ion-select {
+		width: 200px;
+	}
+}
+

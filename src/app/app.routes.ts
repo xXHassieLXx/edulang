@@ -6,8 +6,12 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
+    path: 'admin/cursos',
+    loadComponent: () => import('./components/administrador/gestion-cursos/gestion-cursos.component').then(m => m.GestionCursosComponent),
+  },
+  {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'admin/cursos',
     pathMatch: 'full',
   },
 ];
