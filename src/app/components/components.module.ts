@@ -27,7 +27,6 @@ import { HistorialAcademicoComponent } from './estudiante/historial-academico/hi
   declarations: [
     GestionUsuariosComponent,
     GestionPagosComponent,
-    GestionMatriculasComponent,
     ReportesAcademicosFinancierosComponent,
 
     VerEstudiantesPorCursoComponent,
@@ -46,7 +45,6 @@ import { HistorialAcademicoComponent } from './estudiante/historial-academico/hi
   exports: [
     GestionUsuariosComponent,
     GestionPagosComponent,
-    GestionMatriculasComponent,
     ReportesAcademicosFinancierosComponent,
 
     VerEstudiantesPorCursoComponent,

@@ -89,13 +89,13 @@ export class GestionCursosComponent implements OnInit {
   openCreate() {
     // Resetear
     this.newCurso = { nombre: '', nivel: '', idioma: '', horario: '', cupo: 0, docenteNombre: '' };
-  this.dialogRef = this.dialog.open(this.createDialog, { width: '600px', height: '65vh', panelClass: 'centered-dialog' });
+  this.dialogRef = this.dialog.open(this.createDialog, { width: '600px', maxHeight: '80vh', panelClass: 'centered-dialog' });
   }
 
   openEdit(curso: Curso) {
     // clonar para evitar mutaciones directas hasta confirmar
     this.editingCurso = { ...curso };
-    this.editDialogRef = this.dialog.open(this.editDialog, { width: '600px', height: '65vh', panelClass: 'centered-dialog' });
+    this.editDialogRef = this.dialog.open(this.editDialog, { width: '600px', maxHeight: '80vh', panelClass: 'centered-dialog' });
   }
 
   updateCurso() {

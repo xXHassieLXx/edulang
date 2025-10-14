@@ -1,0 +1,40 @@
+:host { display: block; }
+
+.container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 16px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: calc(100vh - 120px);
+  overflow: auto;
+}
+
+.controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+.search-field { flex: 1 1 280px; }
+
+.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+
+.mat-card-item { display: flex; flex-direction: column; }
+
+.dialog-title { margin-top: 8px; margin-bottom: 8px; }
+
+.muted { color: rgba(0,0,0,0.6); }
+
+.mat-nav { display: flex; align-items: center; gap: 12px; }
+
+.toolbar-content { display: flex; flex-direction: column; }
+
+.toolbar-content .title { font-weight: 600; }
+
+.toolbar-content .subtitle { font-size: 12px; opacity: 0.9; }
+
+.spacer { flex: 1 1 auto; }
+
+.create-btn { display: inline-flex; gap: 8px; align-items: center; }
+
+.create-btn .btn-label { display: inline-block; }
+
+/* Dialog centering handled globally in global.scss (overlay) */

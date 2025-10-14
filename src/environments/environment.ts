@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl : 'http://localhost:8080/EduLang_war_exploded/api'
+  apiUrl : 'https://michelle-strange-luke-shadow.trycloudflare.com/EduLang_war_exploded/api'
 };
 
 /*
@@ -15,3 +15,4 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+ 

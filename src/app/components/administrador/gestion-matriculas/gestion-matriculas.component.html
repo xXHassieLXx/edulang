@@ -1,3 +1,113 @@
-<p>
-  gestion-matriculas works!
-</p>
+<mat-toolbar color="primary" class="mat-nav">
+  <div class="toolbar-content">
+    <div class="title">Gestión de Matrículas</div>
+    <div class="subtitle">Administra inscripciones y controla estados</div>
+  </div>
+  <span class="spacer"></span>
+  <button mat-flat-button color="accent" class="create-btn" (click)="openCreate()" aria-label="Crear matrícula">
+    <mat-icon>add</mat-icon>
+    <span class="btn-label">Crear</span>
+  </button>
+</mat-toolbar>
+
+<div class="container mat-elevation-z2">
+  <div class="controls">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar</mat-label>
+      <input matInput [(ngModel)]="query" (input)="filter()" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Curso</mat-label>
+      <mat-select [(value)]="selectedCursoId" (selectionChange)="filter()">
+        <mat-option value="">Todos</mat-option>
+        <mat-option *ngFor="let c of cursos" [value]="c.id">{{ c.nombre }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <mat-select [(value)]="selectedEstado" (selectionChange)="filter()">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="Activa">Activa</mat-option>
+        <mat-option value="Cancelada">Cancelada</mat-option>
+        <mat-option value="Finalizada">Finalizada</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="filtered.length === 0" class="empty-card">
+    <mat-card>
+      <mat-card-content>
+        <h3>No hay matrículas</h3>
+        <p>No se encontraron matrículas con esos filtros.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="list">
+    <mat-card *ngFor="let m of filtered" class="mat-card-item">
+      <mat-card-header>
+        <mat-card-title>{{ m.estudiante.nombre }} <small class="muted">{{ m.estudiante.documento }}</small></mat-card-title>
+        <mat-card-subtitle>{{ m.curso.nombre }} · {{ m.curso.nivel }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Fecha: {{ m.fecha }}</p>
+        <p>Estado: <strong>{{ m.estado }}</strong></p>
+        <p *ngIf="m.observaciones">Observaciones: {{ m.observaciones }}</p>
+      </mat-card-content>
+        <mat-card-actions>
+          <button mat-stroked-button color="primary" (click)="edit(m)">Editar</button>
+          <button mat-stroked-button color="warn" (click)="delete(m)">Borrar</button>
+        </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Create dialog -->
+  <ng-template #createDialog>
+    <mat-card>
+      <mat-card-title class="dialog-title">Crear Matrícula</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="full">
+          <mat-label>Nombre del Estudiante</mat-label>
+          <input matInput [(ngModel)]="newMatricula.estudianteNombre" placeholder="Juan Pérez" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full">
+          <mat-label>Curso</mat-label>
+          <mat-select [(ngModel)]="newMatricula.curso">
+            <mat-option *ngFor="let c of cursos" [value]="c">{{ c.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="create()">Crear</button>
+        <button mat-stroked-button (click)="dialog.closeAll()">Cancelar</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+
+  <!-- Edit dialog -->
+  <ng-template #editDialog>
+    <mat-card>
+      <mat-card-title class="dialog-title">Editar Matrícula</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="full">
+          <mat-label>Nombre del Estudiante</mat-label>
+          <input matInput [(ngModel)]="editingMatricula.estudianteNombre" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full">
+          <mat-label>Curso</mat-label>
+          <mat-select [(ngModel)]="editingMatricula.curso">
+            <mat-option *ngFor="let c of cursos" [value]="c">{{ c.nombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="update()">Guardar</button>
+        <button mat-stroked-button (click)="dialog.closeAll()">Cancelar</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+</div>
