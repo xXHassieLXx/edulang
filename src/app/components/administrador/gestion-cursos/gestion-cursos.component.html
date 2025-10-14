@@ -38,6 +38,118 @@
     </div>
   </div>
 
+  <!-- Formulario para crear curso (dialog template) -->
+  <ng-template #createDialog>
+    <mat-card>
+      <mat-card-title class="dialog-title">Crear nuevo curso</mat-card-title>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input matInput [(ngModel)]="newCurso.nombre" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Nivel</mat-label>
+            <mat-select [(ngModel)]="newCurso.nivel">
+              <mat-option value="A1">A1</mat-option>
+              <mat-option value="A2">A2</mat-option>
+              <mat-option value="B1">B1</mat-option>
+              <mat-option value="B2">B2</mat-option>
+              <mat-option value="C1">C1</mat-option>
+              <mat-option value="C2">C2</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Idioma</mat-label>
+            <input matInput [(ngModel)]="newCurso.idioma" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Horario</mat-label>
+            <input matInput [(ngModel)]="newCurso.horario" />
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Cupo</mat-label>
+            <input matInput type="number" [(ngModel)]="newCurso.cupo" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Docente</mat-label>
+            <input matInput [(ngModel)]="newCurso.docenteNombre" />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="createCurso()">Crear</button>
+        <button mat-stroked-button (click)="dialog.closeAll()">Cancelar</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+
+  <!-- Edit dialog template -->
+  <ng-template #editDialog>
+    <ng-container *ngIf="editingCurso">
+      <mat-card>
+        <mat-card-title class="dialog-title">Editar curso</mat-card-title>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Nombre</mat-label>
+              <input matInput [(ngModel)]="editingCurso.nombre" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Nivel</mat-label>
+              <mat-select [(ngModel)]="editingCurso.nivel">
+                <mat-option value="A1">A1</mat-option>
+                <mat-option value="A2">A2</mat-option>
+                <mat-option value="B1">B1</mat-option>
+                <mat-option value="B2">B2</mat-option>
+                <mat-option value="C1">C1</mat-option>
+                <mat-option value="C2">C2</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Idioma</mat-label>
+              <input matInput [(ngModel)]="editingCurso.idioma" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Horario</mat-label>
+              <input matInput [(ngModel)]="editingCurso.horario" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Cupo</mat-label>
+              <input matInput type="number" [(ngModel)]="editingCurso.cupo" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Docente</mat-label>
+              <input matInput [(ngModel)]="editingCurso.docenteNombre" />
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-flat-button color="primary" (click)="updateCurso()">Guardar</button>
+          <button mat-stroked-button (click)="dialog.closeAll()">Cancelar</button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  </ng-template>
+
   <div *ngIf="filteredCursos.length === 0" class="empty-card">
     <mat-card>
       <mat-card-content>
@@ -58,7 +170,7 @@
         <p class="meta">Idioma: {{ curso.idioma }} · Horario: {{ curso.horario }} · Cupo: {{ curso.cupo }}</p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-stroked-button color="primary" (click)="editCurso(curso)">Editar</button>
+        <button mat-stroked-button color="primary" (click)="openEdit(curso)">Editar</button>
         <button mat-icon-button color="warn" (click)="deleteCurso(curso)" aria-label="Eliminar">
           <mat-icon>delete</mat-icon>
         </button>

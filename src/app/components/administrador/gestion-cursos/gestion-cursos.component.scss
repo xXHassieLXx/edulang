@@ -101,6 +101,10 @@
 	max-width: 1400px;
 	width: calc(100% - 32px);
 	margin: 16px auto;
+	/* permitir scroll interno si el contenido es alto */
+	overflow: auto;
+	max-height: calc(100vh - 120px);
+	height: calc(100vh - 120px);
 }
 
 /* Custom toolbar styles */
@@ -170,5 +174,68 @@ mat-toolbar {
 @media (max-width: 599px) {
 	.container { padding: 8px; margin: 8px; }
 	.filters { flex-direction: column; align-items: stretch; }
+}
+
+/* Dialog adjustments */
+.mat-dialog-container .mat-card { max-height: 90vh; overflow: auto; }
+
+.create-form { margin-bottom: 16px; }
+.form-row { display: flex; gap: 12px; }
+.form-row mat-form-field { flex: 1 1 auto; }
+
+@media (max-width: 599px) {
+	.form-row { flex-direction: column; }
+}
+
+/* Dialog title wrapping and padding tweaks to avoid truncation */
+.dialog-title {
+	font-size: 20px;
+	font-weight: 600;
+	word-break: break-word;
+	white-space: normal;
+}
+
+/* Add top spacing so the dialog title isn't flush to the top edge */
+.mat-dialog-container .dialog-title {
+	margin-top: 8px;
+	padding-top: 6px;
+}
+
+/* Ensure dialog card has comfortable padding on small screens */
+.mat-dialog-container .mat-card { padding: 12px 16px; min-width: 320px; }
+
+/* Increase dialog width on larger screens */
+@media (min-width: 600px) {
+	.mat-dialog-container { width: auto !important; max-width: 700px !important; }
+}
+
+/* Center dialog vertically using the panelClass */
+.centered-dialog {
+	display: flex !important;
+	align-items: center !important; /* vertical center */
+	justify-content: center !important; /* horizontal center just in case */
+}
+
+/* On very small screens, align to flex-start so dialog isn't cut off at top */
+@media (max-height: 480px) {
+	.centered-dialog { align-items: flex-start !important; padding-top: 8px; }
+}
+
+/* Add larger lateral spacing and comfortable vertical padding for dialogs */
+.centered-dialog .mat-dialog-container {
+	padding: 20px !important; /* space between viewport edges and dialog */
+	box-sizing: border-box;
+}
+
+.centered-dialog .mat-card {
+	padding: 18px 22px !important; /* inside dialog card spacing (top/bottom, left/right) */
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Slightly reduce padding on very small screens to avoid overflow */
+@media (max-width: 420px) {
+	.centered-dialog .mat-dialog-container { padding: 10px !important; }
+	.centered-dialog .mat-card { padding: 12px 14px !important; }
 }
                 

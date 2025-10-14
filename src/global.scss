@@ -84,3 +84,15 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Ensure Ionic content and router outlet allow scrolling and occupy full height */
+ion-app, ion-router-outlet, ion-content, app-root {
+  display: block;
+  height: 100%;
+}
+
+/* Generic page container: ensure internal scrolling when content overflows */
+.page-container {
+  height: 100%;
+  overflow: auto;
+}
