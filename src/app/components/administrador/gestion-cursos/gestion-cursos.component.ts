@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Curso } from 'src/app/models/curso.model';
 import { CursoService } from 'src/app/services/curso.service';
+import { CursoDocenteDto } from 'src/app/models/dto/cursoDocenteDto.model';
 
 @Component({
   selector: 'app-gestion-cursos',
@@ -22,8 +23,8 @@ import { CursoService } from 'src/app/services/curso.service';
 })
 export class GestionCursosComponent implements OnInit {
 
-  cursos: Curso[] = [];
-  filteredCursos: Curso[] = [];
+  cursos: CursoDocenteDto[] = [];
+  filteredCursos: CursoDocenteDto[] = [];
 
   idiomas: string[] = ['Inglés', 'Francés', 'Alemán', 'Español', 'Italiano'];
 
@@ -37,7 +38,7 @@ export class GestionCursosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cursoService.getAllCursos().subscribe({
+    this.cursoService.getAllCursosWithDocente().subscribe({
       next: (data) => {
         this.cursos = data;
         this.filter();
@@ -52,7 +53,11 @@ export class GestionCursosComponent implements OnInit {
   filter() {
   const q = this.query.trim().toLowerCase();
   this.filteredCursos = this.cursos.filter(c => {
-    const matchesQuery = q === '' || [c.nombre, c.idioma].some(f => (f || '').toLowerCase().includes(q));
+    const matchesQuery =
+      q === '' ||
+      [c.nombre, c.idioma, c.nombreDocente, c.apellidoDocente]
+        .map(f => (f || '').toLowerCase())
+        .some(val => val.includes(q));
     const matchesNivel = this.selectedNivel === '' || c.nivel === this.selectedNivel;
     const matchesIdioma = this.selectedIdioma === '' || c.idioma === this.selectedIdioma;
     return matchesQuery && matchesNivel && matchesIdioma;
