@@ -82,7 +82,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Docente</mat-label>
-            <input matInput [(ngModel)]="newCurso.docenteNombre" />
+            <input matInput [(ngModel)]="newCurso.nombreDocente" />
           </mat-form-field>
         </div>
       </mat-card-content>
@@ -138,7 +138,7 @@
 
             <mat-form-field appearance="fill">
               <mat-label>Docente</mat-label>
-              <input matInput [(ngModel)]="editingCurso.docenteNombre" />
+              <input matInput [(ngModel)]="editingCurso.nombreDocente" />
             </mat-form-field>
           </div>
         </mat-card-content>
@@ -164,16 +164,13 @@
       <mat-card-header>
         <div mat-card-avatar class="curso-avatar"><mat-icon>menu_book</mat-icon></div>
         <mat-card-title>{{ curso.nombre }} <span class="tag">{{ curso.nivel }}</span></mat-card-title>
-        <mat-card-subtitle>Docente: {{ curso.docenteNombre || 'Sin asignar' }}</mat-card-subtitle>
+        <mat-card-subtitle>Docente: {{ curso.nombreDocente || 'Sin asignar' }} {{ curso.apellidoDocente || '' }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p class="meta">Idioma: {{ curso.idioma }} · Horario: {{ curso.horario }} · Cupo: {{ curso.cupo }}</p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-stroked-button color="primary" (click)="openEdit(curso)">Editar</button>
-        <button mat-icon-button color="warn" (click)="deleteCurso(curso)" aria-label="Eliminar">
-          <mat-icon>delete</mat-icon>
-        </button>
       </mat-card-actions>
     </mat-card>
   </div>
