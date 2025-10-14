@@ -1,68 +1,68 @@
-<ion-page>
+<mat-toolbar color="primary">
+  <span>Gestión de Cursos</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="openCreate()" aria-label="Crear curso">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+</mat-toolbar>
 
-  <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Gestión de Cursos</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="openCreate()">
-        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  </ion-header>
-
-  <ion-content class="gestion-cursos" fullscreen>
+<div class="container mat-elevation-z2">
   <div class="controls">
-    <ion-searchbar placeholder="Buscar por nombre, idioma o docente" [(ngModel)]="query" (ionInput)="filter()"></ion-searchbar>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar por nombre, idioma o docente</mat-label>
+      <input matInput [(ngModel)]="query" (input)="filter()" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 
     <div class="filters">
-      <ion-select placeholder="Nivel" interface="popover" [(ngModel)]="selectedNivel" (ionChange)="filter()">
-        <ion-select-option value="">Todos</ion-select-option>
-        <ion-select-option value="A1">A1</ion-select-option>
-        <ion-select-option value="A2">A2</ion-select-option>
-        <ion-select-option value="B1">B1</ion-select-option>
-        <ion-select-option value="B2">B2</ion-select-option>
-        <ion-select-option value="C1">C1</ion-select-option>
-        <ion-select-option value="C2">C2</ion-select-option>
-      </ion-select>
+      <mat-form-field appearance="fill">
+        <mat-label>Nivel</mat-label>
+        <mat-select [(value)]="selectedNivel" (selectionChange)="filter()">
+          <mat-option value="">Todos</mat-option>
+          <mat-option value="A1">A1</mat-option>
+          <mat-option value="A2">A2</mat-option>
+          <mat-option value="B1">B1</mat-option>
+          <mat-option value="B2">B2</mat-option>
+          <mat-option value="C1">C1</mat-option>
+          <mat-option value="C2">C2</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      <ion-select placeholder="Idioma" interface="popover" [(ngModel)]="selectedIdioma" (ionChange)="filter()">
-        <ion-select-option value="">Todos</ion-select-option>
-        <ion-select-option *ngFor="let i of idiomas" [value]="i">{{ i }}</ion-select-option>
-      </ion-select>
+      <mat-form-field appearance="fill">
+        <mat-label>Idioma</mat-label>
+        <mat-select [(value)]="selectedIdioma" (selectionChange)="filter()">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let i of idiomas" [value]="i">{{ i }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
-  <ion-card *ngIf="filteredCursos.length === 0" class="empty-card">
-    <ion-card-content>
-      <h3>No hay cursos</h3>
-      <p>No se encontraron cursos que coincidan con los filtros actuales.</p>
-    </ion-card-content>
-  </ion-card>
+  <div *ngIf="filteredCursos.length === 0" class="empty-card">
+    <mat-card>
+      <mat-card-content>
+        <h3>No hay cursos</h3>
+        <p>No se encontraron cursos que coincidan con los filtros actuales.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-  <ion-list>
-    <ion-item *ngFor="let curso of filteredCursos" lines="full">
-      <ion-avatar slot="start" class="curso-avatar">
-        <ion-icon name="book-outline"></ion-icon>
-      </ion-avatar>
-      <ion-label>
-        <h2 class="curso-nombre">{{ curso.nombre }} <span class="tag">{{ curso.nivel }}</span></h2>
+  <div class="course-list">
+    <mat-card *ngFor="let curso of filteredCursos" class="course-card">
+      <mat-card-header>
+        <div mat-card-avatar class="curso-avatar"><mat-icon>menu_book</mat-icon></div>
+        <mat-card-title>{{ curso.nombre }} <span class="tag">{{ curso.nivel }}</span></mat-card-title>
+        <mat-card-subtitle>Docente: {{ curso.docenteNombre || 'Sin asignar' }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
         <p class="meta">Idioma: {{ curso.idioma }} · Horario: {{ curso.horario }} · Cupo: {{ curso.cupo }}</p>
-        <p class="docente">Docente: {{ curso.docenteNombre || 'Sin asignar' }}</p>
-      </ion-label>
-
-      <ion-buttons slot="end">
-        <ion-button color="secondary" fill="outline" size="small" (click)="editCurso(curso)">
-          <ion-icon slot="start" name="create-outline"></ion-icon>
-          Editar
-        </ion-button>
-        <ion-button color="danger" fill="clear" size="small" (click)="deleteCurso(curso)">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
-
-  </ion-content>
-
-</ion-page>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button color="primary" (click)="editCurso(curso)">Editar</button>
+        <button mat-icon-button color="warn" (click)="deleteCurso(curso)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
