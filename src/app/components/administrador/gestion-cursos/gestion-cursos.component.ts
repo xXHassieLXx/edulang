@@ -11,17 +11,8 @@ import { MatDialogModule, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Curso {
-  curso_id: number;
-  nombre: string;
-  nivel: string; // A1..C2
-  idioma: string;
-  horario: string;
-  cupo: number;
-  docenteId?: number | null;
-  docenteNombre?: string | null;
-}
+import { CursoDocenteDto } from 'src/app/models/dto/cursoDocenteDto.model';
+import { CursoService } from 'src/app/services/curso.service';
 
 @Component({
   selector: 'app-gestion-cursos',
@@ -32,8 +23,8 @@ interface Curso {
 })
 export class GestionCursosComponent implements OnInit {
 
-  cursos: Curso[] = [];
-  filteredCursos: Curso[] = [];
+  cursos: CursoDocenteDto[] = [];
+  filteredCursos: CursoDocenteDto[] = [];
 
   idiomas: string[] = ['Inglés', 'Francés', 'Alemán', 'Español', 'Italiano'];
 
@@ -44,55 +35,60 @@ export class GestionCursosComponent implements OnInit {
 
   // crear curso
   showCreate: boolean = false; // legacy flag (no longer used)
-  newCurso: Partial<Curso> = {
+  newCurso: Partial<CursoDocenteDto> = {
     nombre: '',
     nivel: '',
     idioma: '',
     horario: '',
     cupo: 0,
-    docenteNombre: ''
+    nombreDocente: ''
   };
+
+  constructor(
+    public dialog : MatDialog,
+    private cursoService : CursoService
+  ) {}
 
   @ViewChild('createDialog') createDialog!: TemplateRef<any>;
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
   private dialogRef?: MatDialogRef<any>;
   private editDialogRef?: MatDialogRef<any>;
   // curso en edición
-  editingCurso?: Curso | null = null;
+  editingCurso?: CursoDocenteDto | null = null;
 
   
 
   ngOnInit() {
+    this.cursoService.getAllCursosWithDocente().subscribe({
+      next: (data) => {
+        this.cursos = data;
+        this.filter();
+        console.log('Datos cargados: ', data)
+      },
+      error: (err) => {
+        console.log('Error al cargar cursos: ', err);
+      }
+    })
     // Datos de ejemplo; en la app real se obtendrán via HTTP desde el backend
-    this.cursos = [
-      { curso_id: 1, nombre: 'Inglés - Principiantes', nivel: 'A1', idioma: 'Inglés', horario: 'Lunes y Miércoles 18:00-20:00', cupo: 20, docenteId: 1, docenteNombre: 'María López' },
-      { curso_id: 2, nombre: 'Francés Intermedio', nivel: 'B1', idioma: 'Francés', horario: 'Martes y Jueves 10:00-12:00', cupo: 15, docenteId: 2, docenteNombre: 'Jean Dupont' },
-      { curso_id: 3, nombre: 'Alemán Avanzado', nivel: 'C1', idioma: 'Alemán', horario: 'Sábados 09:00-13:00', cupo: 10, docenteId: null, docenteNombre: null },
-      { curso_id: 4, nombre: 'Español para Extranjeros', nivel: 'A2', idioma: 'Español', horario: 'Lunes a Viernes 09:00-10:30', cupo: 25, docenteId: 3, docenteNombre: 'Carlos Pérez' }
-    ];
-
-    this.filteredCursos = [...this.cursos];
   }
 
   filter() {
     const q = this.query.trim().toLowerCase();
     this.filteredCursos = this.cursos.filter(c => {
-      const matchesQuery = q === '' || [c.nombre, c.idioma, c.docenteNombre || ''].some(f => f.toLowerCase().includes(q));
+      const matchesQuery = q === '' || [c.nombre, c.idioma, c.nombreDocente || ''].some(f => f.toLowerCase().includes(q));
       const matchesNivel = this.selectedNivel === '' || c.nivel === this.selectedNivel;
       const matchesIdioma = this.selectedIdioma === '' || c.idioma === this.selectedIdioma;
       return matchesQuery && matchesNivel && matchesIdioma;
     });
   }
 
-  constructor(public dialog: MatDialog) { }
-
   openCreate() {
     // Resetear
-    this.newCurso = { nombre: '', nivel: '', idioma: '', horario: '', cupo: 0, docenteNombre: '' };
+    this.newCurso = { nombre: '', nivel: '', idioma: '', horario: '', cupo: 0, nombreDocente: '' };
   this.dialogRef = this.dialog.open(this.createDialog, { width: '600px', height: '65vh', panelClass: 'centered-dialog' });
   }
 
-  openEdit(curso: Curso) {
+  openEdit(curso: CursoDocenteDto) {
     // clonar para evitar mutaciones directas hasta confirmar
     this.editingCurso = { ...curso };
     this.editDialogRef = this.dialog.open(this.editDialog, { width: '600px', height: '65vh', panelClass: 'centered-dialog' });
@@ -106,9 +102,9 @@ export class GestionCursosComponent implements OnInit {
       return;
     }
     // encontrar y reemplazar en el arreglo original
-    const idx = this.cursos.findIndex(c => c.curso_id === this.editingCurso!.curso_id);
+    const idx = this.cursos.findIndex(c => c.cursoId === this.editingCurso!.cursoId);
     if (idx !== -1) {
-      this.cursos[idx] = { ...this.editingCurso } as Curso;
+      this.cursos[idx] = { ...this.editingCurso } as CursoDocenteDto;
       this.filter();
     }
     if (this.editDialogRef) this.editDialogRef.close();
@@ -121,16 +117,19 @@ export class GestionCursosComponent implements OnInit {
       return;
     }
 
-    const nextId = this.cursos.length ? Math.max(...this.cursos.map(c => c.curso_id)) + 1 : 1;
-    const curso: Curso = {
-      curso_id: nextId,
+    const nextId = this.cursos.length ? Math.max(...this.cursos.map(c => c.cursoId)) + 1 : 1;
+    const curso: CursoDocenteDto = {
+      cursoId: nextId,
       nombre: this.newCurso.nombre as string,
       nivel: this.newCurso.nivel as string,
       idioma: this.newCurso.idioma as string,
       horario: this.newCurso.horario as string,
-      cupo: Number(this.newCurso.cupo) as number,
-      docenteId: null,
-      docenteNombre: this.newCurso.docenteNombre || null,
+      cupo: Number(this.newCurso.cupo),
+      docenteId: 0,
+      nombreDocente: this.newCurso.nombreDocente || '',
+      apellidoDocente: this.newCurso.apellidoDocente || '',
+      especialidad: this.newCurso.especialidad || '',
+      disponibilidad: this.newCurso.disponibilidad || ''
     };
 
     this.cursos.unshift(curso);
@@ -140,14 +139,14 @@ export class GestionCursosComponent implements OnInit {
     }
   }
 
-  editCurso(curso: Curso) {
+  editCurso(curso: CursoDocenteDto) {
     console.log('Editar curso', curso);
   }
 
-  deleteCurso(curso: Curso) {
+  deleteCurso(curso: CursoDocenteDto) {
     // Acción simple de ejemplo: confirmar y eliminar localmente
     if (confirm(`¿Eliminar el curso "${curso.nombre}"? Esta acción no se puede deshacer.`)) {
-      this.cursos = this.cursos.filter(c => c.curso_id !== curso.curso_id);
+      this.cursos = this.cursos.filter(c => c.cursoId !== curso.cursoId);
       this.filter();
     }
   }
