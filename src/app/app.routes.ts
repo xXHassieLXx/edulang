@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/administrador/gestion-cursos/gestion-cursos.component').then(m => m.GestionCursosComponent),
   },
   {
+    path: 'admin/matriculas',
+    loadComponent: () => import('./components/administrador/gestion-matriculas/gestion-matriculas.component').then(m => m.GestionMatriculasComponent),
+  },
+  {
     path: '',
     redirectTo: 'admin/cursos',
     pathMatch: 'full',
